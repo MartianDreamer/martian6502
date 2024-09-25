@@ -4,6 +4,6 @@ pub struct Mos6502 {
     accumulator: u8,
     x: u8,
     y: u8,
-    processor_status: u8,
+    processor_status: u8, // Layout: NV-BDIZC
     mem: [u8; 64 * 1024],
 }

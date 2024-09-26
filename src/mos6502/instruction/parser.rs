@@ -29,6 +29,7 @@ pub fn parse(opcode: u8) -> Result<M6502Ins, InvalidOpcodeError> {
         0x3 => parse_prefix_3_instruction(opcode),
         0x4 => parse_prefix_4_instruction(opcode),
         0x5 => parse_prefix_5_instruction(opcode),
+        0x6 => parse_prefix_6_instruction(opcode),
         _ => Err(InvalidOpcodeError { opcode }),
     }
 }
@@ -341,6 +342,34 @@ fn parse_prefix_5_instruction(opcode: u8) -> Result<M6502Ins, InvalidOpcodeError
             len: 3,
             ccls: 7,
         })),
+        _ => Err(InvalidOpcodeError { opcode }),
+    }
+}
+
+fn parse_prefix_6_instruction(opcode: u8) -> Result<M6502Ins, InvalidOpcodeError> {
+    let lower_nibble = opcode & LOWER_NIBBLE_MASK;
+    match lower_nibble {
+        0x1 => Ok(M6502Ins::AdcIndX(InsAttr {
+            opcode,
+            len: 2,
+            ccls: 6,
+        })),
+        0x5 => Ok(M6502Ins::AdcZP(InsAttr {
+            opcode,
+            len: 2,
+            ccls: 3,
+        })),
+        0x9 => Ok(M6502Ins::AdcImm(InsAttr {
+            opcode,
+            len: 2,
+            ccls: 2,
+        })),
+        0xd => Ok(M6502Ins::AdcAbs(InsAttr {
+            opcode,
+            len: 3,
+            ccls: 4,
+        })),
+        // TODO add more instructions
         _ => Err(InvalidOpcodeError { opcode }),
     }
 }

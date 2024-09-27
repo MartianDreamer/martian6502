@@ -1,7 +1,6 @@
-
 ///
 /// Mos6502 instruction sets
-/// 
+///
 pub enum M6502Ins {
     // ADC - Add with Carry
     AdcImm(InsAttr),
@@ -269,7 +268,25 @@ pub enum M6502Ins {
 }
 
 pub struct InsAttr {
-    pub opc: u8, // opcode of this instruction
-    pub len: u8, // length of this instruction 
-    pub cyc: u8, // number of cpu cycle to complete this instruction
+    opcode: u8, // opcode of this instruction
+    len: u8,    // length of this instruction
+    cyc: u8,    // number of cpu cycle to complete this instruction
+}
+
+impl InsAttr {
+    pub fn new(opcode: u8, len: u8, cyc: u8) -> Self {
+        Self { opcode, len, cyc }
+    }
+
+    pub fn opcode(self: &Self) -> u8 {
+        self.opcode
+    }
+
+    pub fn len(self: &Self) -> u8 {
+        self.len
+    }
+
+    pub fn cyc(self: &Self) -> u8 {
+        self.cyc
+    }
 }

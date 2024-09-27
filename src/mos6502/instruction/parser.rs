@@ -36,6 +36,7 @@ pub fn parse(opcode: u8) -> Result<M6502Ins, InvalidOpcodeError> {
         0xa => parse_prefix_a_instruction(opcode),
         0xb => parse_prefix_b_instruction(opcode),
         0xc => parse_prefix_c_instruction(opcode),
+        0xd => parse_prefix_d_instruction(opcode),
         _ => Err(InvalidOpcodeError { opcode }),
     }
 }
@@ -693,10 +694,129 @@ fn parse_prefix_b_instruction(opcode: u8) -> Result<M6502Ins, InvalidOpcodeError
 fn parse_prefix_c_instruction(opcode: u8) -> Result<M6502Ins, InvalidOpcodeError> {
     let lower_nibble = opcode & LOWER_NIBBLE_MASK;
     match lower_nibble {
+        0x0 => Ok(M6502Ins::CpyImm(InsAttr {
+            opc: opcode,
+            len: 2,
+            cyc: 2,
+        })),
         0x1 => Ok(M6502Ins::CmpIndX(InsAttr {
             opc: opcode,
             len: 2,
             cyc: 6,
+        })),
+        0x4 => Ok(M6502Ins::CpyZP(InsAttr {
+            opc: opcode,
+            len: 2,
+            cyc: 3,
+        })),
+        0x5 => Ok(M6502Ins::CmpZP(InsAttr {
+            opc: opcode,
+            len: 2,
+            cyc: 3,
+        })),
+        0x6 => Ok(M6502Ins::DecZP(InsAttr {
+            opc: opcode,
+            len: 2,
+            cyc: 5,
+        })),
+        0x8 => Ok(M6502Ins::Iny(InsAttr {
+            opc: opcode,
+            len: 1,
+            cyc: 2,
+        })),
+        0x9 => Ok(M6502Ins::CmpImm(InsAttr {
+            opc: opcode,
+            len: 2,
+            cyc: 2,
+        })),
+        0xa => Ok(M6502Ins::Dex(InsAttr {
+            opc: opcode,
+            len: 1,
+            cyc: 2,
+        })),
+        0xc => Ok(M6502Ins::CpyAbs(InsAttr {
+            opc: opcode,
+            len: 3,
+            cyc: 4,
+        })),
+        0xd => Ok(M6502Ins::CmpAbs(InsAttr {
+            opc: opcode,
+            len: 3,
+            cyc: 4,
+        })),
+        0xe => Ok(M6502Ins::CpyAbs(InsAttr {
+            opc: opcode,
+            len: 3,
+            cyc: 6,
+        })),
+        _ => Err(InvalidOpcodeError { opcode }),
+    }
+}
+
+fn parse_prefix_d_instruction(opcode: u8) -> Result<M6502Ins, InvalidOpcodeError> {
+    let lower_nibble = opcode & LOWER_NIBBLE_MASK;
+    match lower_nibble {
+        0x0 => Ok(M6502Ins::Bne(InsAttr {
+            opc: opcode,
+            len: 2,
+            cyc: 2,
+        })),
+        0x1 => Ok(M6502Ins::CmpIndY(InsAttr {
+            opc: opcode,
+            len: 2,
+            cyc: 5,
+        })),
+        0x5 => Ok(M6502Ins::CmpZPX(InsAttr {
+            opc: opcode,
+            len: 2,
+            cyc: 4,
+        })),
+        0x6 => Ok(M6502Ins::DecZPX(InsAttr {
+            opc: opcode,
+            len: 2,
+            cyc: 6,
+        })),
+        0x8 => Ok(M6502Ins::Cld(InsAttr {
+            opc: opcode,
+            len: 1,
+            cyc: 2,
+        })),
+        0x9 => Ok(M6502Ins::CmpAbsY(InsAttr {
+            opc: opcode,
+            len: 3,
+            cyc: 4,
+        })),
+        0xd => Ok(M6502Ins::CmpAbsX(InsAttr {
+            opc: opcode,
+            len: 3,
+            cyc: 4,
+        })),
+        0xe => Ok(M6502Ins::DecAbsX(InsAttr {
+            opc: opcode,
+            len: 3,
+            cyc: 7,
+        })),
+        _ => Err(InvalidOpcodeError { opcode }),
+    }
+}
+
+fn parse_prefix_e_instruction(opcode: u8) -> Result<M6502Ins, InvalidOpcodeError> {
+    let lower_nibble = opcode & LOWER_NIBBLE_MASK;
+    match lower_nibble {
+        0x0 => Ok(M6502Ins::CpxImm(InsAttr {
+            opc: opcode,
+            len: 2,
+            cyc: 2,
+        })),
+        0x4 => Ok(M6502Ins::CpxZP(InsAttr {
+            opc: opcode,
+            len: 2,
+            cyc: 3,
+        })),
+        0xc => Ok(M6502Ins::CpxAbs(InsAttr {
+            opc: opcode,
+            len: 3,
+            cyc: 4,
         })),
         _ => Err(InvalidOpcodeError { opcode }),
     }

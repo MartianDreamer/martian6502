@@ -295,14 +295,28 @@ fn parse_prefix_e_instruction(opcode: u8) -> Result<M6502Ins, InvalidOpcodeError
 fn parse_prefix_f_instruction(opcode: u8) -> Result<M6502Ins, InvalidOpcodeError> {
     let lower_nibble: u8 = opcode & LOWER_NIBBLE_MASK;
     match lower_nibble {
-        0x0=>Ok(M6502Ins::Beq(InsAttr::new(opcode, 2, 2))),
-        0x1=>Ok(M6502Ins::SbcIndY(InsAttr::new(opcode, 2, 5))),
-        0x5=>Ok(M6502Ins::SbcZPX(InsAttr::new(opcode, 2, 4))),
-        0x6=>Ok(M6502Ins::IncZPX(InsAttr::new(opcode, 2, 6))),
-        0x8=>Ok(M6502Ins::Sed(InsAttr::new(opcode, 1, 2))),
-        0x9=>Ok(M6502Ins::SbcAbsY(InsAttr::new(opcode, 3, 4))),
-        0xd=>Ok(M6502Ins::SbcAbsX(InsAttr::new(opcode, 3, 4))),
-        0xe=>Ok(M6502Ins::IncAbsX(InsAttr::new(opcode, 3, 7))),
+        0x0 => Ok(M6502Ins::Beq(InsAttr::new(opcode, 2, 2))),
+        0x1 => Ok(M6502Ins::SbcIndY(InsAttr::new(opcode, 2, 5))),
+        0x5 => Ok(M6502Ins::SbcZPX(InsAttr::new(opcode, 2, 4))),
+        0x6 => Ok(M6502Ins::IncZPX(InsAttr::new(opcode, 2, 6))),
+        0x8 => Ok(M6502Ins::Sed(InsAttr::new(opcode, 1, 2))),
+        0x9 => Ok(M6502Ins::SbcAbsY(InsAttr::new(opcode, 3, 4))),
+        0xd => Ok(M6502Ins::SbcAbsX(InsAttr::new(opcode, 3, 4))),
+        0xe => Ok(M6502Ins::IncAbsX(InsAttr::new(opcode, 3, 7))),
         _ => Err(InvalidOpcodeError { opcode }),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parse_given_x00_should_return_brk() {
+        if let M6502Ins::Brk(ia) = parse(0x00).unwrap() {
+            assert_eq!(ia.opcode(), 0x00);
+            assert_eq!(ia.len(), 1);
+            assert_eq!(ia.cyc(), 7);
+        }
     }
 }

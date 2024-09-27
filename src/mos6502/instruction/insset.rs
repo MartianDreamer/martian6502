@@ -1,6 +1,7 @@
 ///
 /// Mos6502 instruction sets
 ///
+#[derive(Debug)]
 pub enum M6502Ins {
     // ADC - Add with Carry
     AdcImm(InsAttr),
@@ -267,10 +268,22 @@ pub enum M6502Ins {
     Tya(InsAttr),
 }
 
+
+#[derive(Debug)]
 pub struct InsAttr {
     opcode: u8, // opcode of this instruction
     len: u8,    // length of this instruction
     cyc: u8,    // number of cpu cycle to complete this instruction
+}
+
+impl Default for InsAttr {
+    fn default() -> Self {
+        Self {
+            opcode: Default::default(),
+            len: Default::default(),
+            cyc: Default::default(),
+        }
+    }
 }
 
 impl InsAttr {

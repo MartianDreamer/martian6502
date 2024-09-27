@@ -1,7 +1,7 @@
 ///
 /// this module holds logic to excecute instructions
 /// little endian
-/// 
+///
 pub struct Mos6502 {
     pc: u16,
     sp: u8,
@@ -10,4 +10,11 @@ pub struct Mos6502 {
     y: u8,
     ps: u8, // Processing status layout: NV-BDIZC
     mem: [u8; 64 * 1024],
+    step: u16,
+}
+
+impl Mos6502 {
+    pub fn increase_pc(self: &mut Self) {
+        self.pc += self.step;
+    }
 }

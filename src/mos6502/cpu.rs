@@ -1,3 +1,7 @@
+///
+/// this module holds logic to excecute instructions
+/// little endian
+/// 
 pub struct Mos6502 {
     pc: u16,
     sp: u8,

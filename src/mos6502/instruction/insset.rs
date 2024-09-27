@@ -269,7 +269,7 @@ pub enum M6502Ins {
 }
 
 pub struct InsAttr {
-    pub opcode: u8,
-    pub len: u8,
-    pub ccls: u8,
+    pub opc: u8, // opcode of this instruction
+    pub len: u8, // length of this instruction 
+    pub cyc: u8, // number of cpu cycle to complete this instruction
 }

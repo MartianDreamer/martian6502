@@ -1,6 +1,5 @@
 use super::insset::{InsAttr, Mos6502Ins};
 use crate::constant::LOWER_NIBBLE_MASK;
-use std::{error::Error, fmt::Display};
 
 use super::insset::adc::*;
 use super::insset::and::*;

@@ -40,6 +40,13 @@ pub struct Sei {
     pub attr: InsAttr,
 }
 
+///
+/// Unrecognized opcode
+/// 
+pub struct Unr {
+    pub attr: InsAttr,
+}
+
 impl Mos6502Ins for Brk {
     fn execute(&self, cpu: &mut Mos6502) {
         todo!()
@@ -95,6 +102,12 @@ impl Mos6502Ins for Sed {
 }
 
 impl Mos6502Ins for Sei {
+    fn execute(&self, cpu: &mut Mos6502) {
+        todo!()
+    }
+}
+
+impl Mos6502Ins for Unr {
     fn execute(&self, cpu: &mut Mos6502) {
         todo!()
     }

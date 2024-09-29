@@ -42,7 +42,7 @@ pub struct Sei {
 
 ///
 /// Unrecognized opcode
-/// 
+///
 pub struct Unr {
     pub attr: InsAttr,
 }
@@ -60,9 +60,7 @@ impl Mos6502Ins for JmpAbs {
 }
 
 impl Mos6502Ins for JmpInd {
-    fn execute(&self, cpu: &mut Mos6502) {
-        todo!()
-    }
+    fn execute(&self, cpu: &mut Mos6502) {}
 }
 
 impl Mos6502Ins for Jsr {
@@ -109,6 +107,7 @@ impl Mos6502Ins for Sei {
 
 impl Mos6502Ins for Unr {
     fn execute(&self, cpu: &mut Mos6502) {
-        todo!()
+        cpu.stop();
+        print!("Illegall opcode {}", self.attr.opcode)
     }
 }

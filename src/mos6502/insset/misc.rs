@@ -41,9 +41,9 @@ pub struct Sei {
 }
 
 ///
-/// Unrecognized opcode
+/// Illegal opcode
 ///
-pub struct Unr {
+pub struct Ilg {
     pub attr: InsAttr,
 }
 
@@ -105,9 +105,9 @@ impl Mos6502Ins for Sei {
     }
 }
 
-impl Mos6502Ins for Unr {
+impl Mos6502Ins for Ilg {
     fn execute(&self, cpu: &mut Mos6502) {
         cpu.stop();
-        print!("Illegall opcode {}", self.attr.opcode)
+        print!("Illegal opcode {}", self.attr.opcode)
     }
 }

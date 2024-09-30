@@ -46,7 +46,7 @@ pub fn parse(opcode: u8) -> Box<dyn Mos6502Ins> {
         0xd => parse_prefix_d_instruction(opcode),
         0xe => parse_prefix_e_instruction(opcode),
         0xf => parse_prefix_f_instruction(opcode),
-        _ => Box::new(Unr {
+        _ => Box::new(Ilg {
             attr: InsAttr::new(opcode, 1, 2),
         }),
     }
@@ -82,7 +82,7 @@ fn parse_prefix_0_instruction(opcode: u8) -> Box<dyn Mos6502Ins> {
         0xe => Box::new(AslAbs {
             attr: InsAttr::new(opcode, 3, 6),
         }),
-        _ => Box::new(Unr {
+        _ => Box::new(Ilg {
             attr: InsAttr::new(opcode, 1, 2),
         }),
     }
@@ -115,7 +115,7 @@ fn parse_prefix_1_instruction(opcode: u8) -> Box<dyn Mos6502Ins> {
         0xe => Box::new(AslAbsX {
             attr: InsAttr::new(opcode, 3, 7),
         }),
-        _ => Box::new(Unr {
+        _ => Box::new(Ilg {
             attr: InsAttr::new(opcode, 1, 2),
         }),
     }
@@ -157,7 +157,7 @@ fn parse_prefix_2_instruction(opcode: u8) -> Box<dyn Mos6502Ins> {
         0xe => Box::new(RolAbs {
             attr: InsAttr::new(opcode, 3, 6),
         }),
-        _ => Box::new(Unr {
+        _ => Box::new(Ilg {
             attr: InsAttr::new(opcode, 1, 2),
         }),
     }
@@ -190,7 +190,7 @@ fn parse_prefix_3_instruction(opcode: u8) -> Box<dyn Mos6502Ins> {
         0xe => Box::new(RolAbsX {
             attr: InsAttr::new(opcode, 3, 7),
         }),
-        _ => Box::new(Unr {
+        _ => Box::new(Ilg {
             attr: InsAttr::new(opcode, 1, 2),
         }),
     }
@@ -229,7 +229,7 @@ fn parse_prefix_4_instruction(opcode: u8) -> Box<dyn Mos6502Ins> {
         0xe => Box::new(LsrAbs {
             attr: InsAttr::new(opcode, 3, 6),
         }),
-        _ => Box::new(Unr {
+        _ => Box::new(Ilg {
             attr: InsAttr::new(opcode, 1, 2),
         }),
     }
@@ -262,7 +262,7 @@ fn parse_prefix_5_instruction(opcode: u8) -> Box<dyn Mos6502Ins> {
         0xe => Box::new(LsrAbsX {
             attr: InsAttr::new(opcode, 3, 7),
         }),
-        _ => Box::new(Unr {
+        _ => Box::new(Ilg {
             attr: InsAttr::new(opcode, 1, 2),
         }),
     }
@@ -302,7 +302,7 @@ fn parse_prefix_6_instruction(opcode: u8) -> Box<dyn Mos6502Ins> {
             attr: InsAttr::new(opcode, 3, 6),
         }),
         // TODO add more instructions
-        _ => Box::new(Unr {
+        _ => Box::new(Ilg {
             attr: InsAttr::new(opcode, 1, 2),
         }),
     }
@@ -335,7 +335,7 @@ fn parse_prefix_7_instruction(opcode: u8) -> Box<dyn Mos6502Ins> {
         0xe => Box::new(RorAbsX {
             attr: InsAttr::new(opcode, 3, 7),
         }),
-        _ => Box::new(Unr {
+        _ => Box::new(Ilg {
             attr: InsAttr::new(opcode, 1, 2),
         }),
     }
@@ -371,7 +371,7 @@ fn parse_prefix_8_instruction(opcode: u8) -> Box<dyn Mos6502Ins> {
         0xe => Box::new(StxAbs {
             attr: InsAttr::new(opcode, 3, 4),
         }),
-        _ => Box::new(Unr {
+        _ => Box::new(Ilg {
             attr: InsAttr::new(opcode, 1, 2),
         }),
     }
@@ -407,7 +407,7 @@ fn parse_prefix_9_instruction(opcode: u8) -> Box<dyn Mos6502Ins> {
         0xd => Box::new(StaAbsX {
             attr: InsAttr::new(opcode, 3, 5),
         }),
-        _ => Box::new(Unr {
+        _ => Box::new(Ilg {
             attr: InsAttr::new(opcode, 1, 2),
         }),
     }
@@ -452,7 +452,7 @@ fn parse_prefix_a_instruction(opcode: u8) -> Box<dyn Mos6502Ins> {
         0xe => Box::new(LdxAbs {
             attr: InsAttr::new(opcode, 3, 4),
         }),
-        _ => Box::new(Unr {
+        _ => Box::new(Ilg {
             attr: InsAttr::new(opcode, 1, 2),
         }),
     }
@@ -494,7 +494,7 @@ fn parse_prefix_b_instruction(opcode: u8) -> Box<dyn Mos6502Ins> {
         0xe => Box::new(LdxAbsY {
             attr: InsAttr::new(opcode, 3, 4),
         }),
-        _ => Box::new(Unr {
+        _ => Box::new(Ilg {
             attr: InsAttr::new(opcode, 1, 2),
         }),
     }
@@ -536,7 +536,7 @@ fn parse_prefix_c_instruction(opcode: u8) -> Box<dyn Mos6502Ins> {
         0xe => Box::new(DecAbs {
             attr: InsAttr::new(opcode, 3, 6),
         }),
-        _ => Box::new(Unr {
+        _ => Box::new(Ilg {
             attr: InsAttr::new(opcode, 1, 2),
         }),
     }
@@ -569,7 +569,7 @@ fn parse_prefix_d_instruction(opcode: u8) -> Box<dyn Mos6502Ins> {
         0xe => Box::new(DecAbsX {
             attr: InsAttr::new(opcode, 3, 7),
         }),
-        _ => Box::new(Unr {
+        _ => Box::new(Ilg {
             attr: InsAttr::new(opcode, 1, 2),
         }),
     }
@@ -611,7 +611,7 @@ fn parse_prefix_e_instruction(opcode: u8) -> Box<dyn Mos6502Ins> {
         0xe => Box::new(IncAbs {
             attr: InsAttr::new(opcode, 3, 6),
         }),
-        _ => Box::new(Unr {
+        _ => Box::new(Ilg {
             attr: InsAttr::new(opcode, 1, 2),
         }),
     }
@@ -644,7 +644,7 @@ fn parse_prefix_f_instruction(opcode: u8) -> Box<dyn Mos6502Ins> {
         0xe => Box::new(IncAbsX {
             attr: InsAttr::new(opcode, 3, 7),
         }),
-        _ => Box::new(Unr {
+        _ => Box::new(Ilg {
             attr: InsAttr::new(opcode, 1, 2),
         }),
     }

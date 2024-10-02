@@ -1,6 +1,6 @@
 use crate::{
     constant::{CARRY_ON_MASK, NEGATIVE_ON_MASK, OVERFLOW_ON_MASK, ZERO_ON_MASK},
-    mos6502::address_mode::{immediate, zero_page},
+    mos6502::address_mode::{immediate, zero_page, zero_page_x},
 };
 
 use super::{InsAttr, Mos6502, Mos6502Ins};
@@ -46,7 +46,8 @@ impl Mos6502Ins for AdcZP {
 
 impl Mos6502Ins for AdcZPX {
     fn execute(&self, cpu: &mut Mos6502) {
-        todo!()
+        let operand: u8 = zero_page_x(cpu);
+        add_and_update_status_register(cpu, operand);
     }
 }
 

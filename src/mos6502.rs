@@ -1,13 +1,17 @@
-use super::parser::parse;
+mod parser;
+mod insset;
+mod address_mode;
+
+use parser::parse;
 
 pub struct Mos6502 {
-    pub pc: u16,
-    pub sp: u8,
-    pub acc: u8, // Accumulator
-    pub x: u8,
-    pub y: u8,
-    pub sr: u8, // Processing status layout: NV-BDIZC
-    pub mem: [u8; 64 * 1024],
+    pc: u16,
+    sp: u8,
+    acc: u8, // Accumulator
+    x: u8,
+    y: u8,
+    sr: u8, // Processing status layout: NV-BDIZC
+    mem: [u8; 64 * 1024],
     power_on: bool,
 }
 

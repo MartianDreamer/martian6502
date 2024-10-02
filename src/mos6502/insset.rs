@@ -20,7 +20,7 @@ pub mod sbc;
 pub mod sta;
 pub mod stxy;
 pub mod transfer;
-use super::emulator::Mos6502;
+use super::Mos6502;
 
 pub trait Mos6502Ins {
     fn execute(&self, cpu: &mut Mos6502);

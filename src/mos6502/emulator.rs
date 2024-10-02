@@ -6,7 +6,7 @@ pub struct Mos6502 {
     pub acc: u8, // Accumulator
     pub x: u8,
     pub y: u8,
-    pub ps: u8, // Processing status layout: NV-BDIZC
+    pub sr: u8, // Processing status layout: NV-BDIZC
     pub mem: [u8; 64 * 1024],
     power_on: bool,
 }
@@ -15,7 +15,7 @@ impl Mos6502 {
     pub fn start(self: &mut Self) {
         self.power_on = true;
         while self.power_on {
-            let ins = parse(self.mem[self.pc as usize]);
+            let ins = parse(self.mem[self.pc as usize] as u8);
             ins.execute(self);
         }
     }

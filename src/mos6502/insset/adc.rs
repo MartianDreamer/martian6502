@@ -1,5 +1,5 @@
 use crate::mos6502::{
-    address_mode::{absolute, absolute_x, absolute_y, immediate, indirect_x, zero_page, zero_page_x, AddressModeFn},
+    address_mode::{absolute, absolute_x, absolute_y, immediate, indirect_x, indirect_y, zero_page, zero_page_x, AddressModeFn},
     constant::{CARRY_ON_MASK, NEGATIVE_ON_MASK, OVERFLOW_ON_MASK, ZERO_ON_MASK},
 };
 
@@ -74,7 +74,7 @@ impl Mos6502Ins for AdcIndX {
 
 impl Mos6502Ins for AdcIndY {
     fn execute(&self, cpu: &mut Mos6502) {
-        todo!()
+        do_add(cpu, &self.attr, indirect_y);
     }
 }
 

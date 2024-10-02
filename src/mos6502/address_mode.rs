@@ -25,7 +25,6 @@ pub fn absolute(cpu: &Mos6502) -> u8 {
     return cpu.mem[address];
 }
 
-#[allow(arithmetic_overflow)]
 pub fn absolute_x(cpu: &Mos6502) -> u8 {
     let address_lsb = next_nth_byte_from_pc(cpu, 1) as u16;
     let address_msb = next_nth_byte_from_pc(cpu, 2) as u16;
@@ -34,7 +33,6 @@ pub fn absolute_x(cpu: &Mos6502) -> u8 {
     cpu.mem[effective_address as usize]
 }
 
-#[allow(arithmetic_overflow)]
 pub fn absolute_y(cpu: &Mos6502) -> u8 {
     let address_lsb = next_nth_byte_from_pc(cpu, 1) as u16;
     let address_msb = next_nth_byte_from_pc(cpu, 2) as u16;
@@ -55,6 +53,16 @@ pub fn indirect_x(cpu: &Mos6502) -> u8 {
 }
 
 #[allow(arithmetic_overflow)]
+pub fn indirect_y(cpu: &Mos6502) -> u8 {
+    let indirect_position: u8 = next_nth_byte_from_pc(cpu, 1);
+    let indirect_position_next: u8 = indirect_position + 1;
+    let address_lsb = cpu.mem[indirect_position as usize] as u16;
+    let address_msb = cpu.mem[indirect_position_next as usize] as u16;
+    let address = address_msb << 8 | address_lsb;
+    let effective_address = address + cpu.yr as u16;
+    cpu.mem[effective_address as usize]
+}
+
 fn next_nth_byte_from_pc(cpu: &Mos6502, nth: u16) -> u8 {
     let nth_byte = cpu.pc + nth;
     cpu.mem[nth_byte as usize]

@@ -1,10 +1,9 @@
-mod parser;
 mod insset;
 mod address_mode;
 mod constant;
 
 use insset::InsAttr;
-use parser::parse;
+use insset::parser::parse;
 
 pub struct Mos6502 {
     pc: u16,

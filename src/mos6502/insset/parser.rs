@@ -1,28 +1,28 @@
-use super::insset::{InsAttr, Mos6502Ins};
-use super::constant::LOWER_NIBBLE_MASK;
+use super::{InsAttr, Mos6502Ins};
+use crate::mos6502::constant::LOWER_NIBBLE_MASK;
 
-use super::insset::adc::*;
-use super::insset::and::*;
-use super::insset::asl::*;
-use super::insset::bit::*;
-use super::insset::branch::*;
-use super::insset::clr::*;
-use super::insset::cmp::*;
-use super::insset::cpxy::*;
-use super::insset::decrement::*;
-use super::insset::eor::*;
-use super::insset::increment::*;
-use super::insset::lda::*;
-use super::insset::ldxy::*;
-use super::insset::lsr::*;
-use super::insset::misc::*;
-use super::insset::ora::*;
-use super::insset::phpl::*;
-use super::insset::rorl::*;
-use super::insset::sbc::*;
-use super::insset::sta::*;
-use super::insset::stxy::*;
-use super::insset::transfer::*;
+use super::adc::*;
+use super::and::*;
+use super::asl::*;
+use super::bit::*;
+use super::branch::*;
+use super::clr::*;
+use super::cmp::*;
+use super::cpxy::*;
+use super::decrement::*;
+use super::eor::*;
+use super::increment::*;
+use super::lda::*;
+use super::ldxy::*;
+use super::lsr::*;
+use super::misc::*;
+use super::ora::*;
+use super::phpl::*;
+use super::rorl::*;
+use super::sbc::*;
+use super::sta::*;
+use super::stxy::*;
+use super::transfer::*;
 
 ///
 /// parse an opcode to create a M6502Ins

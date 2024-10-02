@@ -1,26 +1,29 @@
-pub mod adc;
-pub mod and;
-pub mod asl;
-pub mod branch;
-pub mod bit;
-pub mod misc;
-pub mod clr;
-pub mod cmp;
-pub mod cpxy;
-pub mod decrement;
-pub mod eor;
-pub mod increment;
-pub mod lda;
-pub mod ldxy;
-pub mod lsr;
-pub mod ora;
-pub mod phpl;
-pub mod rorl;
-pub mod sbc;
-pub mod sta;
-pub mod stxy;
-pub mod transfer;
+mod adc;
+mod and;
+mod asl;
+mod branch;
+mod bit;
+mod misc;
+mod clr;
+mod cmp;
+mod cpxy;
+mod decrement;
+mod eor;
+mod increment;
+mod lda;
+mod ldxy;
+mod lsr;
+mod ora;
+mod phpl;
+mod rorl;
+mod sbc;
+mod sta;
+mod stxy;
+mod transfer;
 use super::Mos6502;
+
+
+pub mod parser;
 
 pub trait Mos6502Ins {
     fn execute(&self, cpu: &mut Mos6502);

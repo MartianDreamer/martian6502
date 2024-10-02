@@ -1,6 +1,6 @@
-use crate::{
+use crate::mos6502::{
+    address_mode::{absolute, absolute_x, absolute_y, immediate, indirect_x, zero_page, zero_page_x, AddressModeFn},
     constant::{CARRY_ON_MASK, NEGATIVE_ON_MASK, OVERFLOW_ON_MASK, ZERO_ON_MASK},
-    mos6502::address_mode::{immediate, zero_page, zero_page_x},
 };
 
 use super::{InsAttr, Mos6502, Mos6502Ins};
@@ -32,46 +32,43 @@ pub struct AdcIndY {
 
 impl Mos6502Ins for AdcImm {
     fn execute(&self, cpu: &mut Mos6502) {
-        let operand: u8 = immediate(cpu);
-        add_and_update_status_register(cpu, operand);
+        do_add(cpu, &self.attr, immediate);
     }
 }
 
 impl Mos6502Ins for AdcZP {
     fn execute(&self, cpu: &mut Mos6502) {
-        let operand: u8 = zero_page(cpu);
-        add_and_update_status_register(cpu, operand);
+        do_add(cpu, &self.attr, zero_page);
     }
 }
 
 impl Mos6502Ins for AdcZPX {
     fn execute(&self, cpu: &mut Mos6502) {
-        let operand: u8 = zero_page_x(cpu);
-        add_and_update_status_register(cpu, operand);
+        do_add(cpu, &self.attr, zero_page_x);
     }
 }
 
 impl Mos6502Ins for AdcAbs {
     fn execute(&self, cpu: &mut Mos6502) {
-        todo!()
+        do_add(cpu, &self.attr, absolute);
     }
 }
 
 impl Mos6502Ins for AdcAbsX {
     fn execute(&self, cpu: &mut Mos6502) {
-        todo!()
+        do_add(cpu, &self.attr, absolute_x);
     }
 }
 
 impl Mos6502Ins for AdcAbsY {
     fn execute(&self, cpu: &mut Mos6502) {
-        todo!()
+        do_add(cpu, &self.attr, absolute_y);
     }
 }
 
 impl Mos6502Ins for AdcIndX {
     fn execute(&self, cpu: &mut Mos6502) {
-        todo!()
+        do_add(cpu, &self.attr, indirect_x);
     }
 }
 
@@ -81,10 +78,16 @@ impl Mos6502Ins for AdcIndY {
     }
 }
 
+fn do_add(cpu: &mut Mos6502, attr: &InsAttr, address_mode_fn: AddressModeFn) {
+    let operand: u8 = address_mode_fn(cpu);
+    add_and_update_status_register(cpu, operand);
+    cpu.next_instruction(attr);
+}
+
 #[allow(arithmetic_overflow)]
 fn add_and_update_status_register(cpu: &mut Mos6502, operand: u8) {
-    let result: u8 = cpu.acc + operand;
-    let acc_bit7: u8 = cpu.acc >> 7;
+    let result: u8 = cpu.ac + operand;
+    let acc_bit7: u8 = cpu.ac >> 7;
     let operand_bit7: u8 = operand >> 7;
     let result_bit7: u8 = result >> 7;
 
@@ -98,5 +101,5 @@ fn add_and_update_status_register(cpu: &mut Mos6502, operand: u8) {
         cpu.sr |= NEGATIVE_ON_MASK;
     }
 
-    cpu.acc = result
+    cpu.ac = result
 }

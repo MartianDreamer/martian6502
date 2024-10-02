@@ -1,5 +1,5 @@
 use super::insset::{InsAttr, Mos6502Ins};
-use crate::constant::LOWER_NIBBLE_MASK;
+use super::constant::LOWER_NIBBLE_MASK;
 
 use super::insset::adc::*;
 use super::insset::and::*;

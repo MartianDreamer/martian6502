@@ -1,16 +1,28 @@
 use super::{InsAttr, Mos6502, Mos6502Ins};
 
-pub struct StxZP{pub attr: InsAttr}
+pub struct StxZP {
+    pub attr: InsAttr,
+}
 
-pub struct StxZPY{pub attr: InsAttr}
+pub struct StxZPY {
+    pub attr: InsAttr,
+}
 
-pub struct StxAbs{pub attr: InsAttr}
+pub struct StxAbs {
+    pub attr: InsAttr,
+}
 
-pub struct StyZP{pub attr: InsAttr}
+pub struct StyZP {
+    pub attr: InsAttr,
+}
 
-pub struct StyZPX{pub attr: InsAttr}
+pub struct StyZPX {
+    pub attr: InsAttr,
+}
 
-pub struct StyAbs{pub attr: InsAttr}
+pub struct StyAbs {
+    pub attr: InsAttr,
+}
 
 impl Mos6502Ins for StxZP {
     fn execute(&self, cpu: &mut Mos6502) {

@@ -1,9 +1,8 @@
 mod adc;
 mod and;
 mod asl;
-mod branch;
 mod bit;
-mod misc;
+mod branch;
 mod clr;
 mod cmp;
 mod cpxy;
@@ -13,6 +12,7 @@ mod increment;
 mod lda;
 mod ldxy;
 mod lsr;
+mod misc;
 mod ora;
 mod phpl;
 mod rorl;
@@ -22,13 +22,11 @@ mod stxy;
 mod transfer;
 use super::Mos6502;
 
-
 pub mod parser;
 
 pub trait Mos6502Ins {
     fn execute(&self, cpu: &mut Mos6502);
 }
-
 
 #[derive(Debug)]
 pub struct InsAttr {

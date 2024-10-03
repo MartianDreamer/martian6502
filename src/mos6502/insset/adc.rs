@@ -1,5 +1,8 @@
 use crate::mos6502::{
-    address_mode::{absolute, absolute_x, absolute_y, immediate, indirect_x, indirect_y, zero_page, zero_page_x, AddressModeFn},
+    address_mode::{
+        absolute, absolute_x, absolute_y, immediate, indirect_x, indirect_y, zero_page,
+        zero_page_x, AddressModeFn,
+    },
     constant::{CARRY_ON_MASK, NEGATIVE_ON_MASK, OVERFLOW_ON_MASK, ZERO_ON_MASK},
 };
 

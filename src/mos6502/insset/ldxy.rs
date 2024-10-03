@@ -1,24 +1,44 @@
 use super::{InsAttr, Mos6502, Mos6502Ins};
 
-pub struct LdxImm{pub attr: InsAttr}
+pub struct LdxImm {
+    pub attr: InsAttr,
+}
 
-pub struct LdxZP{pub attr: InsAttr}
+pub struct LdxZP {
+    pub attr: InsAttr,
+}
 
-pub struct LdxZPY{pub attr: InsAttr}
+pub struct LdxZPY {
+    pub attr: InsAttr,
+}
 
-pub struct LdxAbs{pub attr: InsAttr}
+pub struct LdxAbs {
+    pub attr: InsAttr,
+}
 
-pub struct LdxAbsY{pub attr: InsAttr}
+pub struct LdxAbsY {
+    pub attr: InsAttr,
+}
 
-pub struct LdyImm{pub attr: InsAttr}
+pub struct LdyImm {
+    pub attr: InsAttr,
+}
 
-pub struct LdyZP{pub attr: InsAttr}
+pub struct LdyZP {
+    pub attr: InsAttr,
+}
 
-pub struct LdyZPX{pub attr: InsAttr}
+pub struct LdyZPX {
+    pub attr: InsAttr,
+}
 
-pub struct LdyAbs{pub attr: InsAttr}
+pub struct LdyAbs {
+    pub attr: InsAttr,
+}
 
-pub struct LdyAbsX{pub attr: InsAttr}
+pub struct LdyAbsX {
+    pub attr: InsAttr,
+}
 
 impl Mos6502Ins for LdxImm {
     fn execute(&self, cpu: &mut Mos6502) {

@@ -67,3 +67,94 @@ fn next_nth_byte_from_pc(cpu: &Mos6502, nth: u16) -> u8 {
     let nth_byte = cpu.pc + nth;
     cpu.mem[nth_byte as usize]
 }
+
+#[cfg(test)]
+mod tests {
+    // Note this useful idiom: importing names from outer (for mod tests) scope.
+    use super::*;
+
+    #[test]
+    fn test_immediate() {
+        let mut cpu = Mos6502::default();
+        cpu.mem[1] = 0xaa;
+        let actual = immediate(&cpu);
+        assert_eq!(0xaa, actual);
+    }
+
+    #[test]
+    fn test_zero_page() {
+        let mut cpu = Mos6502::default();
+        cpu.pc = 30;
+        cpu.mem[31] = 0xaa;
+        cpu.mem[0xaa] = 0x12;
+        let actual = zero_page(&cpu);
+        assert_eq!(0x12, actual);
+    }
+
+    #[test]
+    fn test_zero_page_x() {
+        let mut cpu = Mos6502::default();
+        cpu.pc = 30;
+        cpu.mem[31] = 0xaa;
+        cpu.xr = 0x1;
+        cpu.mem[0xaa + 0x1] = 0x12;
+        let actual = zero_page_x(&cpu);
+        assert_eq!(0x12, actual);
+    }
+
+    #[test]
+    fn test_absolute() {
+        let mut cpu = Mos6502::default();
+        cpu.mem[1] = 0x30;
+        cpu.mem[2] = 0x10;
+        cpu.mem[0x1030] = 0xaa;
+        let actual = absolute(&cpu);
+        assert_eq!(0xaa, actual)
+    }
+
+    #[test]
+    fn test_absolute_x() {
+        let mut cpu = Mos6502::default();
+        cpu.mem[1] = 0x30;
+        cpu.mem[2] = 0x10;
+        cpu.xr = 0x12;
+        cpu.mem[0x1030 + 0x12] = 0xaa;
+        let actual = absolute_x(&cpu);
+        assert_eq!(0xaa, actual)
+    }
+
+    #[test]
+    fn test_absolute_y() {
+        let mut cpu = Mos6502::default();
+        cpu.mem[1] = 0x30;
+        cpu.mem[2] = 0x10;
+        cpu.yr = 0x12;
+        cpu.mem[0x1030 + 0x12] = 0xaa;
+        let actual = absolute_y(&cpu);
+        assert_eq!(0xaa, actual)
+    }
+
+    #[test]
+    fn test_indirect_x() {
+        let mut cpu = Mos6502::default();
+        cpu.mem[1] = 0x70;
+        cpu.xr = 0x10;
+        cpu.mem[0x70 + 0x10] = 0x20;
+        cpu.mem[0x70 + 0x10 + 0x1] = 0x10;
+        cpu.mem[0x1020] = 0xaa;
+        let actual = indirect_x(&cpu);
+        assert_eq!(0xaa, actual)
+    }
+
+    #[test]
+    fn test_indirect_y() {
+        let mut cpu = Mos6502::default();
+        cpu.mem[1] = 0x70;
+        cpu.yr = 0x10;
+        cpu.mem[0x70] = 0x20;
+        cpu.mem[0x71] = 0x10;
+        cpu.mem[0x1020 + 0x10] = 0xaa;
+        let actual = indirect_y(&cpu);
+        assert_eq!(0xaa, actual)
+    }
+}

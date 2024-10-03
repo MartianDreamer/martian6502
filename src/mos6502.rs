@@ -1,9 +1,9 @@
-mod insset;
 mod address_mode;
 mod constant;
+mod insset;
 
-use insset::InsAttr;
 use insset::parser::parse;
+use insset::InsAttr;
 
 pub struct Mos6502 {
     pc: u16,
@@ -31,5 +31,20 @@ impl Mos6502 {
 
     fn next_instruction(self: &mut Self, attr: &InsAttr) {
         self.pc += attr.len() as u16;
+    }
+}
+
+impl Default for Mos6502 {
+    fn default() -> Self {
+        Self {
+            pc: 0,
+            sp: 0,
+            ac: 0,
+            xr: 0,
+            yr: 0,
+            sr: 0,
+            mem: [0; 64 * 1024],
+            power_on: false,
+        }
     }
 }

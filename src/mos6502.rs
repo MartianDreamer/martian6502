@@ -2,8 +2,9 @@ mod address_mode;
 mod constant;
 mod insset;
 
+use console::Term;
 use insset::parser::parse;
-use insset::InsAttr;
+use insset::{InsAttr, Mos6502Ins};
 
 pub struct Mos6502 {
     pc: u16,
@@ -20,7 +21,21 @@ impl Mos6502 {
     pub fn start(self: &mut Self) {
         self.power_on = true;
         while self.power_on {
-            let ins = parse(self.mem[self.pc as usize] as u8);
+            let ins: Box<dyn Mos6502Ins> = parse(self.mem[self.pc as usize] as u8);
+            ins.execute(self);
+        }
+    }
+
+    pub fn debug(self: &mut Self) {
+        self.power_on = true;
+        let stdout = Term::stdout();
+        while self.power_on {
+            let ins: Box<dyn Mos6502Ins> = parse(self.mem[self.pc as usize] as u8);
+            println!(
+                "pc: {}\nsp: {}\nac: {}\nxr: {}\nyr: {}\nsr: {}\nins_opcode: {}\n",
+                self.pc, self.sp, self.ac, self.xr, self.yr, self.sr, self.mem[self.pc as usize]
+            );
+            if let Ok(_) = stdout.read_char() {}
             ins.execute(self);
         }
     }

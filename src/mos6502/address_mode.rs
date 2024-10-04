@@ -76,7 +76,7 @@ mod tests {
     #[test]
     fn test_immediate() {
         let mut cpu = Mos6502::default();
-        cpu.mem[1] = 0xaa;
+        cpu.mem[cpu.pc as usize + 1] = 0xaa;
         let actual = immediate(&cpu);
         assert_eq!(0xaa, actual);
     }
@@ -105,7 +105,7 @@ mod tests {
     #[test]
     fn test_absolute() {
         let mut cpu = Mos6502::default();
-        cpu.mem[1] = 0x30;
+        cpu.mem[cpu.pc as usize + 1] = 0x30;
         cpu.mem[2] = 0x10;
         cpu.mem[0x1030] = 0xaa;
         let actual = absolute(&cpu);
@@ -115,7 +115,7 @@ mod tests {
     #[test]
     fn test_absolute_x() {
         let mut cpu = Mos6502::default();
-        cpu.mem[1] = 0x30;
+        cpu.mem[cpu.pc as usize + 1] = 0x30;
         cpu.mem[2] = 0x10;
         cpu.xr = 0x12;
         cpu.mem[0x1030 + 0x12] = 0xaa;
@@ -126,7 +126,7 @@ mod tests {
     #[test]
     fn test_absolute_y() {
         let mut cpu = Mos6502::default();
-        cpu.mem[1] = 0x30;
+        cpu.mem[cpu.pc as usize + 1] = 0x30;
         cpu.mem[2] = 0x10;
         cpu.yr = 0x12;
         cpu.mem[0x1030 + 0x12] = 0xaa;
@@ -137,7 +137,7 @@ mod tests {
     #[test]
     fn test_indirect_x() {
         let mut cpu = Mos6502::default();
-        cpu.mem[1] = 0x70;
+        cpu.mem[cpu.pc as usize + 1] = 0x70;
         cpu.xr = 0x10;
         cpu.mem[0x70 + 0x10] = 0x20;
         cpu.mem[0x70 + 0x10 + 0x1] = 0x10;
@@ -149,7 +149,7 @@ mod tests {
     #[test]
     fn test_indirect_y() {
         let mut cpu = Mos6502::default();
-        cpu.mem[1] = 0x70;
+        cpu.mem[cpu.pc as usize + 1] = 0x70;
         cpu.yr = 0x10;
         cpu.mem[0x70] = 0x20;
         cpu.mem[0x71] = 0x10;

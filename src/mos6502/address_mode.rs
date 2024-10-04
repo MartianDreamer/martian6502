@@ -92,6 +92,15 @@ pub fn indirect_y(cpu: &Mos6502) -> u8 {
     cpu.mem[effective_address as usize]
 }
 
+#[allow(arithmetic_overflow)]
+pub fn relative(cpu: &Mos6502) -> u16 {
+    let offset: u8 = next_nth_byte_from_pc(cpu, 1);
+    let mut pc_lsb = cpu.pc as u8;
+    let pc_msb = (cpu.pc >> 8) as u8;
+    pc_lsb += offset;
+    ((pc_msb as u16) << 8) | pc_lsb as u16
+}
+
 fn next_nth_byte_from_pc(cpu: &Mos6502, nth: u16) -> u8 {
     let nth_byte = cpu.pc + nth;
     cpu.mem[nth_byte as usize]
@@ -235,5 +244,14 @@ mod tests {
         assert_eq!(0xaa, *actual);
         *actual = 0xff;
         assert_eq!(0xff, *actual);
+    }
+
+    #[test]
+    fn test_relative() {
+        let mut cpu = Mos6502::default();
+        cpu.pc = 0x00f8;
+        cpu.mem[cpu.pc as usize + 1] = 0xf9;
+        let actual = relative(&cpu);
+        assert_eq!(0xf1, actual)
     }
 }

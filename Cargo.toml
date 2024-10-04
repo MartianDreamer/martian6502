@@ -5,3 +5,9 @@ edition = "2021"
 
 [dependencies]
 console = "0.15.8"
+
+[profile.dev]
+overflow-checks = false 
+[profile.release]
+overflow-checks = false 
+

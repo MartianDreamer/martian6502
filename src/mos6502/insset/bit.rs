@@ -1,7 +1,7 @@
 use crate::mos6502::{
     address_mode::{absolute, zero_page, AddressModeFn},
     constant::{
-        LAST_BIT_MASK, NEGATIVE_OFF_MASK, NEGATIVE_ON_MASK, OVERFLOW_OFF_MASK, OVERFLOW_ON_MASK,
+        BIT_0_MASK, NEGATIVE_OFF_MASK, NEGATIVE_ON_MASK, OVERFLOW_OFF_MASK, OVERFLOW_ON_MASK,
         ZERO_OFF_MASK, ZERO_ON_MASK,
     },
 };
@@ -30,7 +30,7 @@ impl Mos6502Ins for BitAbs {
 
 fn do_bit(cpu: &mut Mos6502, attr: &InsAttr, address_mode_fn: AddressModeFn) {
     let operand: u8 = address_mode_fn(cpu);
-    let operand_bit6: u8 = (operand >> 6) & LAST_BIT_MASK;
+    let operand_bit6: u8 = (operand >> 6) & BIT_0_MASK;
     let operand_bit7: u8 = operand >> 7;
 
     if operand & cpu.ac == 0 {

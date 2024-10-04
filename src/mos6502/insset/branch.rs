@@ -1,3 +1,8 @@
+use crate::mos6502::{
+    address_mode::{immediate, relative},
+    constant::BIT_0_MASK,
+};
+
 use super::{InsAttr, Mos6502, Mos6502Ins};
 
 pub struct Bcc {
@@ -34,7 +39,11 @@ pub struct Bvs {
 
 impl Mos6502Ins for Bcc {
     fn execute(&self, cpu: &mut Mos6502) {
-        todo!()
+        let carry_bit: u8 = cpu.sr & BIT_0_MASK;
+        if carry_bit == 0b1 {
+            let new_pc: u16 = relative(cpu);
+            cpu.pc = new_pc
+        }
     }
 }
 

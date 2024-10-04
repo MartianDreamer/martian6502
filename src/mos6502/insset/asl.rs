@@ -81,7 +81,7 @@ impl Mos6502Ins for AslAbsX {
 
 fn do_asl(cpu: &mut Mos6502, attr: &InsAttr, immutable_fn: AddressModeImmutableFn) {
     let address: &mut u8 = immutable_fn(cpu);
-    let old_val_bit_7 = *address >> 7;
+    let old_val_bit_7: u8 = *address >> 7;
     let result: u8 = *address << 1;
     *address = result;
 

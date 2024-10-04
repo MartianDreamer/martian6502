@@ -75,8 +75,8 @@ impl Mos6502Ins for AndIndY {
 }
 
 fn do_and(cpu: &mut Mos6502, attr: &InsAttr, address_mode_fn: AddressModeFn) {
-    let operand = address_mode_fn(cpu);
-    let result = cpu.ac & operand;
+    let operand: u8 = address_mode_fn(cpu);
+    let result: u8 = cpu.ac & operand;
 
     if result >> 7 == 0b1 {
         cpu.sr |= NEGATIVE_ON_MASK

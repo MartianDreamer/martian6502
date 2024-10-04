@@ -24,3 +24,5 @@ pub const ZERO_OFF_MASK: u8 = 0b11111101;
 
 pub const CARRY_ON_MASK: u8 = 0b00000001;
 pub const CARRY_OFF_MASK: u8 = 0b11111110;
+
+pub const LAST_BIT_MASK: u8 = 0b00000001;

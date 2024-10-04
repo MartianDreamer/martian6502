@@ -94,11 +94,8 @@ pub fn indirect_y(cpu: &Mos6502) -> u8 {
 
 #[allow(arithmetic_overflow)]
 pub fn relative(cpu: &Mos6502) -> u16 {
-    let offset: u8 = next_nth_byte_from_pc(cpu, 1);
-    let mut pc_lsb = cpu.pc as u8;
-    let pc_msb = (cpu.pc >> 8) as u8;
-    pc_lsb += offset;
-    ((pc_msb as u16) << 8) | pc_lsb as u16
+    // TODO rewrite
+    todo!()
 }
 
 fn next_nth_byte_from_pc(cpu: &Mos6502, nth: u16) -> u8 {

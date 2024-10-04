@@ -3,7 +3,10 @@ use crate::mos6502::{
         absolute, absolute_x, absolute_y, immediate, indirect_x, indirect_y, zero_page,
         zero_page_x, AddressModeFn,
     },
-    constant::{CARRY_ON_MASK, NEGATIVE_ON_MASK, OVERFLOW_ON_MASK, ZERO_ON_MASK},
+    constant::{
+        CARRY_OFF_MASK, CARRY_ON_MASK, NEGATIVE_OFF_MASK, NEGATIVE_ON_MASK, OVERFLOW_OFF_MASK,
+        OVERFLOW_ON_MASK, ZERO_OFF_MASK, ZERO_ON_MASK,
+    },
 };
 
 use super::{InsAttr, Mos6502, Mos6502Ins};
@@ -96,12 +99,26 @@ fn add_and_update_status_register(cpu: &mut Mos6502, operand: u8) {
 
     if acc_bit7 == operand_bit7 && acc_bit7 != result_bit7 {
         cpu.sr |= OVERFLOW_ON_MASK;
-        cpu.sr |= CARRY_ON_MASK;
+    } else {
+        cpu.sr &= OVERFLOW_OFF_MASK;
     }
+
+    if u8::MAX - cpu.ac < operand {
+        cpu.sr |= CARRY_ON_MASK
+    } else {
+        cpu.sr &= CARRY_OFF_MASK
+    }
+
     if result == 0 {
-        cpu.sr |= ZERO_ON_MASK;
-    } else if result_bit7 == 0b1 {
-        cpu.sr |= NEGATIVE_ON_MASK;
+        cpu.sr |= ZERO_ON_MASK
+    } else {
+        cpu.sr &= ZERO_OFF_MASK
+    }
+
+    if result_bit7 == 0b1 {
+        cpu.sr |= NEGATIVE_ON_MASK
+    } else {
+        cpu.sr &= NEGATIVE_OFF_MASK
     }
 
     cpu.ac = result

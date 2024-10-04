@@ -3,7 +3,7 @@ use crate::mos6502::{
         absolute, absolute_x, absolute_y, immediate, indirect_x, indirect_y, zero_page,
         zero_page_x, AddressModeFn,
     },
-    constant::{NEGATIVE_ON_MASK, ZERO_ON_MASK},
+    constant::{NEGATIVE_OFF_MASK, NEGATIVE_ON_MASK, ZERO_OFF_MASK, ZERO_ON_MASK},
 };
 
 use super::{InsAttr, Mos6502, Mos6502Ins};
@@ -77,11 +77,19 @@ impl Mos6502Ins for AndIndY {
 fn do_and(cpu: &mut Mos6502, attr: &InsAttr, address_mode_fn: AddressModeFn) {
     let operand = address_mode_fn(cpu);
     let result = cpu.ac & operand;
+
     if result >> 7 == 0b1 {
-        cpu.sr |= NEGATIVE_ON_MASK;
-    } else if result == 0 {
-        cpu.sr |= ZERO_ON_MASK;
+        cpu.sr |= NEGATIVE_ON_MASK
+    } else {
+        cpu.sr &= NEGATIVE_OFF_MASK
     }
+
+    if result == 0 {
+        cpu.sr |= ZERO_ON_MASK
+    } else {
+        cpu.sr &= ZERO_OFF_MASK
+    }
+
     cpu.ac = result;
     cpu.next_instruction(attr);
 }

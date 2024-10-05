@@ -62,10 +62,21 @@ impl Mos6502Ins for JmpAbs {
     }
 }
 
+#[allow(arithmetic_overflow)]
 impl Mos6502Ins for JmpInd {
     fn execute(&self, cpu: &mut Mos6502) {
-        // TODO rewrite
-        todo!()
+        let address_lsb: u8 = cpu.mem[cpu.pc as usize + 1];
+        let address_msb = cpu.mem[cpu.pc as usize + 2] as u16;
+
+        let next_address_lsb: u8 = address_lsb + 1;
+
+        let address: u16 = (address_msb << 8) | address_lsb as u16;
+        let next_address: u16 = (address_msb << 8) | next_address_lsb as u16;
+
+        let effect_address_lsb = cpu.mem[address as usize] as u16;
+        let effect_address_msb = cpu.mem[next_address as usize] as u16;
+
+        cpu.pc = (effect_address_msb << 8) | effect_address_lsb
     }
 }
 

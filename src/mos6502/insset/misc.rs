@@ -128,3 +128,44 @@ impl Mos6502Ins for Ilg {
         print!("Illegal opcode {}", self.attr.opcode)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn JmpInd_should_jump_indirect() {
+        let mut cpu = Mos6502::default();
+        cpu.mem[cpu.pc as usize + 1] = 0xfe;
+        cpu.mem[cpu.pc as usize + 2] = 0x02;
+        cpu.mem[0x02fe] = 0xaa;
+        cpu.mem[0x02ff] = 0xaa;
+        let ins = JmpInd {
+            attr: InsAttr {
+                opcode: 0x0,
+                len: 0x2,
+                cyc: 0x1,
+            },
+        };
+        ins.execute(&mut cpu);
+        assert_eq!(0xaaaa, cpu.pc)
+    }
+
+    #[test]
+    fn JmpInd_should_jump_indirect_and_not_turn_page() {
+        let mut cpu = Mos6502::default();
+        cpu.mem[cpu.pc as usize + 1] = 0xff;
+        cpu.mem[cpu.pc as usize + 2] = 0x02;
+        cpu.mem[0x02ff] = 0xaa;
+        cpu.mem[0x0200] = 0xaa;
+        let ins = JmpInd {
+            attr: InsAttr {
+                opcode: 0x0,
+                len: 0x2,
+                cyc: 0x1,
+            },
+        };
+        ins.execute(&mut cpu);
+        assert_eq!(0xaaaa, cpu.pc)
+    }
+}

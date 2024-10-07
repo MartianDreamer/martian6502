@@ -94,8 +94,7 @@ pub fn indirect_y(cpu: &Mos6502) -> u8 {
 
 #[allow(arithmetic_overflow)]
 pub fn relative(cpu: &Mos6502) -> u16 {
-    // TODO rewrite
-    todo!()
+    return next_nth_byte_from_pc(cpu, 1) as i8 as u16;
 }
 
 fn next_nth_byte_from_pc(cpu: &Mos6502, nth: u16) -> u8 {

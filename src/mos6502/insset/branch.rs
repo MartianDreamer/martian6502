@@ -36,8 +36,8 @@ pub struct Bvs {
 
 impl Mos6502Ins for Bcc {
     fn execute(&self, cpu: &mut Mos6502) {
-        let carry_bit: u8 = cpu.sr & BIT_0_MASK;
-        if carry_bit == 0b0 {
+        let carry_flag: u8 = cpu.sr & BIT_0_MASK;
+        if carry_flag == 0b0 {
             move_to_offset(cpu, &self.attr);
         }
     }
@@ -72,25 +72,37 @@ impl Mos6502Ins for Bmi {
 
 impl Mos6502Ins for Bne {
     fn execute(&self, cpu: &mut Mos6502) {
-        todo!()
+        let zero_flag: u8 = (cpu.sr >> 1) & BIT_0_MASK;
+        if zero_flag == 0b0 {
+            move_to_offset(cpu, &self.attr)
+        }
     }
 }
 
 impl Mos6502Ins for Bpl {
     fn execute(&self, cpu: &mut Mos6502) {
-        todo!()
+        let negative_flag: u8 = (cpu.sr >> 7) & BIT_0_MASK;
+        if negative_flag == 0b0 {
+            move_to_offset(cpu, &self.attr)
+        }
     }
 }
 
 impl Mos6502Ins for Bvc {
     fn execute(&self, cpu: &mut Mos6502) {
-        todo!()
+        let overflow_flag: u8 = (cpu.sr >> 6) & BIT_0_MASK;
+        if overflow_flag == 0b0 {
+            move_to_offset(cpu, &self.attr)
+        }
     }
 }
 
 impl Mos6502Ins for Bvs {
     fn execute(&self, cpu: &mut Mos6502) {
-        todo!()
+        let overflow_flag: u8 = (cpu.sr >> 6) & BIT_0_MASK;
+        if overflow_flag == 0b1 {
+            move_to_offset(cpu, &self.attr)
+        }
     }
 }
 

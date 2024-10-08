@@ -243,11 +243,13 @@ mod tests {
     }
 
     #[test]
+    #[allow(arithmetic_overflow)]
     fn test_relative() {
         let mut cpu = Mos6502::default();
         cpu.pc = 0x00f8;
-        cpu.mem[cpu.pc as usize + 1] = 0xf9;
+        let expected: u8 = 0xff;
+        cpu.mem[cpu.pc as usize + 1] = expected;
         let actual = relative(&cpu);
-        assert_eq!(0xf1, actual)
+        assert_eq!(expected as i8 as u16, actual)
     }
 }

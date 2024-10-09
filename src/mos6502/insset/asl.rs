@@ -1,12 +1,6 @@
-use crate::mos6502::{
-    address_mode::{
-        absolute_immutable, absolute_x_immutable, zero_page_immutatble, zero_page_x_immutable,
-        AddressModeImmutableFn,
-    },
-    constant::{
-        CARRY_OFF_MASK, CARRY_ON_MASK, NEGATIVE_OFF_MASK, NEGATIVE_ON_MASK, ZERO_OFF_MASK,
-        ZERO_ON_MASK,
-    },
+use crate::mos6502::address_mode::{
+    absolute_immutable, absolute_x_immutable, zero_page_immutatble, zero_page_x_immutable,
+    AddressModeImmutableFn,
 };
 
 use super::{
@@ -35,23 +29,9 @@ impl Mos6502Ins for AslAcc {
         let result: u8 = cpu.ac << 1;
         let old_val_bit_7 = cpu.ac >> 7;
 
-        if old_val_bit_7 == 0b1 {
-            cpu.sr |= CARRY_ON_MASK
-        } else {
-            cpu.sr &= CARRY_OFF_MASK
-        }
-
-        if result == 0 {
-            cpu.sr |= ZERO_ON_MASK
-        } else {
-            cpu.sr &= ZERO_OFF_MASK
-        }
-
-        if result << 7 == 0b1 {
-            cpu.sr |= NEGATIVE_ON_MASK
-        } else {
-            cpu.sr &= NEGATIVE_OFF_MASK
-        }
+        update_carry_flag(cpu, old_val_bit_7 == 0b1);
+        update_zero_flag(cpu, result == 0);
+        update_negative_flag(cpu, result >> 7 == 0b1);
 
         cpu.ac = result;
         cpu.next_instruction(&self.attr);

@@ -1,9 +1,9 @@
-use crate::mos6502::{
-    address_mode::{absolute, immediate, zero_page, AddressModeFn},
-    constant::{CARRY_ON_MASK, NEGATIVE_ON_MASK, ZERO_ON_MASK},
-};
+use crate::mos6502::address_mode::{absolute, immediate, zero_page, AddressModeFn};
 
-use super::{InsAttr, Mos6502, Mos6502Ins};
+use super::{
+    utils::{update_carry_flag, update_negative_flag, update_zero_flag},
+    InsAttr, Mos6502, Mos6502Ins,
+};
 
 pub struct CpxImm {
     pub attr: InsAttr,
@@ -67,26 +67,20 @@ impl Mos6502Ins for CpyAbs {
 
 fn do_compare_x(cpu: &mut Mos6502, attr: &InsAttr, address_fn: AddressModeFn) {
     let operand: u8 = address_fn(cpu);
-    if cpu.xr >= operand {
-        cpu.sr |= CARRY_ON_MASK
-    } else {
-        cpu.sr |= NEGATIVE_ON_MASK
-    }
-    if cpu.xr == operand {
-        cpu.sr |= ZERO_ON_MASK
-    }
+
+    update_carry_flag(cpu, cpu.xr >= operand);
+    update_negative_flag(cpu, cpu.xr < operand);
+    update_zero_flag(cpu, cpu.xr == operand);
+
     cpu.next_instruction(attr);
 }
 
 fn do_compare_y(cpu: &mut Mos6502, attr: &InsAttr, address_fn: AddressModeFn) {
     let operand: u8 = address_fn(cpu);
-    if cpu.yr >= operand {
-        cpu.sr |= CARRY_ON_MASK
-    } else {
-        cpu.sr |= NEGATIVE_ON_MASK
-    }
-    if cpu.yr == operand {
-        cpu.sr |= ZERO_ON_MASK
-    }
+
+    update_carry_flag(cpu, cpu.yr >= operand);
+    update_negative_flag(cpu, cpu.yr < operand);
+    update_zero_flag(cpu, cpu.yr == operand);
+
     cpu.next_instruction(attr);
 }

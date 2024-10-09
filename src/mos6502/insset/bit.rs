@@ -1,12 +1,12 @@
 use crate::mos6502::{
     address_mode::{absolute, zero_page, AddressModeFn},
-    constant::{
-        BIT_0_MASK, NEGATIVE_OFF_MASK, NEGATIVE_ON_MASK, OVERFLOW_OFF_MASK, OVERFLOW_ON_MASK,
-        ZERO_OFF_MASK, ZERO_ON_MASK,
-    },
+    constant::BIT_0_MASK,
 };
 
-use super::{InsAttr, Mos6502, Mos6502Ins};
+use super::{
+    utils::{update_negative_flag, update_overflow_flag, update_zero_flag},
+    InsAttr, Mos6502, Mos6502Ins,
+};
 
 pub struct BitZP {
     pub attr: InsAttr,
@@ -33,23 +33,9 @@ fn do_bit(cpu: &mut Mos6502, attr: &InsAttr, address_mode_fn: AddressModeFn) {
     let operand_bit6: u8 = (operand >> 6) & BIT_0_MASK;
     let operand_bit7: u8 = operand >> 7;
 
-    if operand & cpu.ac == 0 {
-        cpu.sr |= ZERO_ON_MASK
-    } else {
-        cpu.sr &= ZERO_OFF_MASK
-    }
-
-    if operand_bit7 == 0b1 {
-        cpu.sr |= NEGATIVE_ON_MASK
-    } else {
-        cpu.sr &= NEGATIVE_OFF_MASK
-    }
-
-    if operand_bit6 == 0b1 {
-        cpu.sr |= OVERFLOW_ON_MASK
-    } else {
-        cpu.sr &= OVERFLOW_OFF_MASK
-    }
+    update_zero_flag(cpu, operand & cpu.ac == 0);
+    update_negative_flag(cpu, operand_bit7 == 0b1);
+    update_overflow_flag(cpu, operand_bit6 == 0b1);
 
     cpu.next_instruction(attr);
 }

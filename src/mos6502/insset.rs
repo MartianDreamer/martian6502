@@ -20,6 +20,7 @@ mod sbc;
 mod sta;
 mod stxy;
 mod transfer;
+mod utils;
 use super::Mos6502;
 
 pub mod parser;

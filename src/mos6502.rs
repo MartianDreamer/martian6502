@@ -3,6 +3,7 @@ mod constant;
 mod insset;
 
 use console::Term;
+use constant::BIT_0_MASK;
 use insset::parser::parse;
 use insset::{InsAttr, Mos6502Ins};
 
@@ -46,6 +47,10 @@ impl Mos6502 {
 
     fn next_instruction(self: &mut Self, attr: &InsAttr) {
         self.pc += attr.len() as u16;
+    }
+
+    fn is_carried(self: &Self) -> u8 {
+        self.sr & BIT_0_MASK
     }
 }
 

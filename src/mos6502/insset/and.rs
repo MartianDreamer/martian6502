@@ -1,12 +1,9 @@
-use crate::mos6502::{
-    address_mode::{
-        absolute, absolute_x, absolute_y, immediate, indirect_x, indirect_y, zero_page,
-        zero_page_x, AddressModeFn,
-    },
-    constant::{NEGATIVE_OFF_MASK, NEGATIVE_ON_MASK, ZERO_OFF_MASK, ZERO_ON_MASK},
+use crate::mos6502::address_mode::{
+    absolute, absolute_x, absolute_y, immediate, indirect_x, indirect_y, zero_page, zero_page_x,
+    AddressModeFn,
 };
 
-use super::{InsAttr, Mos6502, Mos6502Ins};
+use super::{utils::{update_negative_flag, update_zero_flag}, InsAttr, Mos6502, Mos6502Ins};
 
 pub struct AndImm {
     pub attr: InsAttr,
@@ -78,17 +75,8 @@ fn do_and(cpu: &mut Mos6502, attr: &InsAttr, address_mode_fn: AddressModeFn) {
     let operand: u8 = address_mode_fn(cpu);
     let result: u8 = cpu.ac & operand;
 
-    if result >> 7 == 0b1 {
-        cpu.sr |= NEGATIVE_ON_MASK
-    } else {
-        cpu.sr &= NEGATIVE_OFF_MASK
-    }
-
-    if result == 0 {
-        cpu.sr |= ZERO_ON_MASK
-    } else {
-        cpu.sr &= ZERO_OFF_MASK
-    }
+    update_negative_flag(cpu, result >> 7 == 0b1);
+    update_zero_flag(cpu, result == 0);
 
     cpu.ac = result;
     cpu.next_instruction(attr);

@@ -1,15 +1,12 @@
-use crate::mos6502::{
-    address_mode::{
-        absolute, absolute_x, absolute_y, immediate, indirect_x, indirect_y, zero_page,
-        zero_page_x, AddressModeFn,
-    },
-    constant::{
-        CARRY_OFF_MASK, CARRY_ON_MASK, NEGATIVE_OFF_MASK, NEGATIVE_ON_MASK, OVERFLOW_OFF_MASK,
-        OVERFLOW_ON_MASK, ZERO_OFF_MASK, ZERO_ON_MASK,
-    },
+use crate::mos6502::address_mode::{
+    absolute, absolute_x, absolute_y, immediate, indirect_x, indirect_y, zero_page, zero_page_x,
+    AddressModeFn,
 };
 
-use super::{InsAttr, Mos6502, Mos6502Ins};
+use super::{
+    utils::{update_carry_flag, update_negative_flag, update_overflow_flag, update_zero_flag},
+    InsAttr, Mos6502, Mos6502Ins,
+};
 
 pub struct AdcImm {
     pub attr: InsAttr,
@@ -92,34 +89,16 @@ fn do_add(cpu: &mut Mos6502, attr: &InsAttr, address_mode_fn: AddressModeFn) {
 
 #[allow(arithmetic_overflow)]
 fn add_and_update_status_register(cpu: &mut Mos6502, operand: u8) {
-    let result: u8 = cpu.ac + operand;
+    let carry: u8 = cpu.is_carried();
+    let result: u8 = cpu.ac + operand + carry;
     let acc_bit7: u8 = cpu.ac >> 7;
     let operand_bit7: u8 = operand >> 7;
     let result_bit7: u8 = result >> 7;
 
-    if acc_bit7 == operand_bit7 && acc_bit7 != result_bit7 {
-        cpu.sr |= OVERFLOW_ON_MASK;
-    } else {
-        cpu.sr &= OVERFLOW_OFF_MASK;
-    }
-
-    if u8::MAX - cpu.ac < operand {
-        cpu.sr |= CARRY_ON_MASK
-    } else {
-        cpu.sr &= CARRY_OFF_MASK
-    }
-
-    if result == 0 {
-        cpu.sr |= ZERO_ON_MASK
-    } else {
-        cpu.sr &= ZERO_OFF_MASK
-    }
-
-    if result_bit7 == 0b1 {
-        cpu.sr |= NEGATIVE_ON_MASK
-    } else {
-        cpu.sr &= NEGATIVE_OFF_MASK
-    }
+    update_overflow_flag(cpu, acc_bit7 == operand_bit7 && acc_bit7 != result_bit7);
+    update_carry_flag(cpu, u8::MAX - cpu.ac - carry < operand);
+    update_zero_flag(cpu, result == 0);
+    update_negative_flag(cpu, result_bit7 == 0b1);
 
     cpu.ac = result
 }

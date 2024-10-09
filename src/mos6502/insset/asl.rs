@@ -9,7 +9,10 @@ use crate::mos6502::{
     },
 };
 
-use super::{InsAttr, Mos6502, Mos6502Ins};
+use super::{
+    utils::{update_carry_flag, update_negative_flag, update_zero_flag},
+    InsAttr, Mos6502, Mos6502Ins,
+};
 
 pub struct AslAcc {
     pub attr: InsAttr,
@@ -85,23 +88,9 @@ fn do_asl(cpu: &mut Mos6502, attr: &InsAttr, immutable_fn: AddressModeImmutableF
     let result: u8 = *address << 1;
     *address = result;
 
-    if old_val_bit_7 == 0b1 {
-        cpu.sr |= CARRY_ON_MASK
-    } else {
-        cpu.sr &= CARRY_OFF_MASK
-    }
-
-    if result == 0 {
-        cpu.sr |= ZERO_ON_MASK
-    } else {
-        cpu.sr &= ZERO_OFF_MASK
-    }
-
-    if result << 7 == 0b1 {
-        cpu.sr |= NEGATIVE_ON_MASK
-    } else {
-        cpu.sr &= NEGATIVE_OFF_MASK
-    }
+    update_carry_flag(cpu, old_val_bit_7 == 0b1);
+    update_zero_flag(cpu, result == 0);
+    update_negative_flag(cpu, result >> 7 == 0b1);
 
     cpu.next_instruction(attr);
 }

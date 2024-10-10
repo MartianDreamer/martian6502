@@ -26,6 +26,13 @@ pub fn zero_page_x(cpu: &Mos6502) -> u8 {
 }
 
 #[allow(arithmetic_overflow)]
+pub fn zero_page_y(cpu: &Mos6502) -> u8 {
+    let address: u8 = next_nth_byte_from_pc(cpu, 1);
+    let effective_address: u8 = address + cpu.yr;
+    cpu.mem[effective_address as usize]
+}
+
+#[allow(arithmetic_overflow)]
 pub fn zero_page_x_immutable(cpu: &mut Mos6502) -> &mut u8 {
     let address: u8 = next_nth_byte_from_pc(cpu, 1);
     let effective_address: u8 = address + cpu.xr;
@@ -251,5 +258,16 @@ mod tests {
         cpu.mem[cpu.pc as usize + 1] = expected;
         let actual = relative(&cpu);
         assert_eq!(expected as i8 as u16, actual)
+    }
+
+    #[test]
+    fn test_zero_page_y() {
+        let mut cpu = Mos6502::default();
+        cpu.pc = 30;
+        cpu.mem[31] = 0xaa;
+        cpu.yr = 0x1;
+        cpu.mem[0xaa + 0x1] = 0x12;
+        let actual = zero_page_y(&cpu);
+        assert_eq!(0x12, actual);
     }
 }

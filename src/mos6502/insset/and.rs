@@ -75,7 +75,7 @@ fn do_and(cpu: &mut Mos6502, attr: &InsAttr, address_mode_fn: AddressModeFn) {
     let operand: u8 = address_mode_fn(cpu);
     let result: u8 = cpu.ac & operand;
 
-    update_negative_flag(cpu, result >> 7 == 0b1);
+    update_negative_flag(cpu, (result as i8) < 0);
     update_zero_flag(cpu, result == 0);
 
     cpu.ac = result;

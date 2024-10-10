@@ -70,7 +70,7 @@ fn do_asl(cpu: &mut Mos6502, attr: &InsAttr, immutable_fn: AddressModeImmutableF
 
     update_carry_flag(cpu, old_val_bit_7 == 0b1);
     update_zero_flag(cpu, result == 0);
-    update_negative_flag(cpu, result >> 7 == 0b1);
+    update_negative_flag(cpu, (result as i8) < 0);
 
     cpu.next_instruction(attr);
 }

@@ -31,10 +31,9 @@ impl Mos6502Ins for BitAbs {
 fn do_bit(cpu: &mut Mos6502, attr: &InsAttr, address_mode_fn: AddressModeFn) {
     let operand: u8 = address_mode_fn(cpu);
     let operand_bit6: u8 = (operand >> 6) & BIT_0_MASK;
-    let operand_bit7: u8 = operand >> 7;
 
     update_zero_flag(cpu, operand & cpu.ac == 0);
-    update_negative_flag(cpu, operand_bit7 == 0b1);
+    update_negative_flag(cpu, (operand as i8) < 0);
     update_overflow_flag(cpu, operand_bit6 == 0b1);
 
     cpu.next_instruction(attr);

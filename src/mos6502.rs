@@ -19,13 +19,13 @@ pub struct Mos6502 {
 }
 
 impl Mos6502 {
-    pub fn start(self: &mut Self) {
-        self.power_on = true;
-        while self.power_on {
-            let ins: Box<dyn Mos6502Ins> = parse(self.mem[self.pc as usize] as u8);
-            ins.execute(self);
-        }
-    }
+    // pub fn start(self: &mut Self) {
+    //     self.power_on = true;
+    //     while self.power_on {
+    //         let ins: Box<dyn Mos6502Ins> = parse(self.mem[self.pc as usize] as u8);
+    //         ins.execute(self);
+    //     }
+    // }
 
     pub fn debug(self: &mut Self) {
         self.power_on = true;
